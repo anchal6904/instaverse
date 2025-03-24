@@ -18,7 +18,7 @@ app.use('/user',userRoutes);
 
 const PORT = process.env.PORT || 5001;
 const MONGOURL=process.env.MONGOURL;
-console.log("hello");
+// console.log("hello");
 
 const connectdb = async () => {
     try {

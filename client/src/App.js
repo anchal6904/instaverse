@@ -18,7 +18,7 @@ const App=()=>{
           <Route path="/" element={<Home />} />
           <Route path="/authform" element={<AuthForm/>}/>
         </Routes>
-        <Footer style={styles.footer}>2024 Instaverse</Footer>
+        <Footer style={styles.footer}>2025 Instaverse</Footer>
       </Layout>
     </BrowserRouter>
   );
