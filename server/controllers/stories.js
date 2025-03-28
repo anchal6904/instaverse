@@ -59,25 +59,32 @@ const deleteStory = async (req, res) => {
 const likeStory = async (req, res) => {
     const { id } = req.params;
 
-    if (!req.userId) return res.json({ message: "Unauthenticated User" });
+    if (!req.userId) return res.status(401).json({ message: "Unauthenticated User" });
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).send("This id doesnt belong to any story");
+        return res.status(404).json({ message: "This id doesn't belong to any story" });
     }
 
-    const story = await Story.findById(id);
+    try {
+        const story = await Story.findById(id);
 
-    const index = story.likes.findIndex(id => id === String(req.userId));
+        if (!story) return res.status(404).json({ message: "Story not found" });
 
-    if (index === -1) { // if user has not liked the story
-        story.likes.push(req.userId);
-    } else {
-        story.likes = story.likes.filter(id => id !== String(req.userId));
+        const hasLiked = story.likes.includes(req.userId);
+
+        const updatedStory = await Story.findByIdAndUpdate(
+            id,
+            hasLiked
+                ? { $pull: { likes: req.userId } }  // Remove like if already liked
+                : { $addToSet: { likes: req.userId } }, // Add like if not liked
+            { new: true }
+        );
+
+        res.status(200).json(updatedStory);
+    } catch (error) {
+        console.error("Error in likeStory:", error);
+        res.status(500).json({ message: "Something went wrong" });
     }
-
-    const updatedStory = await Story.findByIdAndUpdate(id, story, { new: true });
-
-    res.json(updatedStory);
-}
+};
 
 export { getStories, createStory, updateStory, deleteStory, likeStory };
