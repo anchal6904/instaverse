@@ -8,7 +8,7 @@ import userRoutes from './routes/users.js';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(bodyParser.json({ limit: "32mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "32mb", extended: true }));
 app.use('/stories', storyRoutes);
