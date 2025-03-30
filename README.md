@@ -61,6 +61,5 @@ npm start
 ## ✨ Contributing
 Pull requests are welcome! Open an issue for feature requests or bug reports.
 
----
 
 
